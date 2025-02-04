@@ -1,4 +1,4 @@
-package com.android.modularmvi
+package com.android.modularmvi.app
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
