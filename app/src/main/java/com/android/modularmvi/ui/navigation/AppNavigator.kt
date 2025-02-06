@@ -2,28 +2,41 @@ package com.android.modularmvi.ui.navigation
 
 import androidx.navigation.NavController
 
-class AppNavigator(private val navController: NavController) {
+class AppNavigator(
+    private val navController: NavController
+) {
 
+    /**
+     * Navigates to the specified destination.
+     */
     fun navigateTo(destination: Destinations) {
         val route = when (destination) {
-            is Destinations.Home -> destination.route
-            is Destinations.Profile -> destination.route
-            is Destinations.Settings -> destination.route
             is Destinations.Detail -> Destinations.Detail.createRoute(destination.itemId)
+            else -> destination.route
         }
+        navigate(route)
+    }
 
+    /**
+     * Handles navigation while managing the back stack efficiently.
+     */
+    private fun navigate(route: String) {
         navController.navigate(route) {
             popUpTo(navController.graph.startDestinationId) {
                 saveState = true
             }
-            // Avoid building up a large stack of destinations
-            launchSingleTop = true
-            // Restore state when re-selecting a previously selected item
-            restoreState = true
+            launchSingleTop = true  // Prevent multiple instances of the same screen
+            restoreState = true  // Preserve state when re-selecting the same destination
         }
     }
 
+    /**
+     * Navigates back if possible.
+     */
     fun goBack() {
-        navController.popBackStack()
+        if (!navController.popBackStack()) {
+            // Handle additional back navigation logic if needed
+        }
     }
 }
+

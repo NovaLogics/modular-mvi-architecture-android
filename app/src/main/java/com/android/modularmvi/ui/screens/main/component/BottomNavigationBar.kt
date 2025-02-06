@@ -9,26 +9,18 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.res.painterResource
-import androidx.navigation.NavController
-import androidx.navigation.compose.currentBackStackEntryAsState
 import com.android.modularmvi.R
 import com.android.modularmvi.ui.navigation.AppNavigator
 import com.android.modularmvi.ui.navigation.Destinations
-
 import java.util.Locale
-
 
 @Composable
 fun BottomNavigationBar(
-    navController: NavController,
-    navItems: List<Destinations>
+    appNavigator: AppNavigator,
+    navItems: List<Destinations>,
+    currentRoute: String
 ) {
-    val backStackEntry by navController.currentBackStackEntryAsState()
-    val currentRoute = backStackEntry?.destination?.route
-    val appNavigator = AppNavigator(navController)
-
     BottomNavigation(
         backgroundColor = MaterialTheme.colorScheme.background,
     ) {
@@ -43,25 +35,34 @@ fun BottomNavigationBar(
     }
 }
 
+/**
+ * Displays a label for the navigation item.
+ */
 @Composable
 fun NavigationLabel(screenName: String) {
     Text(
-        screenName.uppercase(Locale.getDefault()),
+        text = screenName.uppercase(Locale.getDefault()),
         color = MaterialTheme.colorScheme.onPrimaryContainer,
     )
 }
 
+/**
+ * Displays an icon for the navigation item.
+ */
 @Composable
 fun NavigationIcon(navItemIndex: Int) {
+    // Map each index to an appropriate icon resource
     val iconRes = when (navItemIndex) {
         0 -> R.drawable.ic_nav_home
         1 -> R.drawable.ic_nav_profile
         2 -> R.drawable.ic_nav_settings
-        else -> R.drawable.ic_nav_home
+        else -> R.drawable.ic_nav_home // Default fallback
     }
-    return Icon(
+
+    Icon(
         painter = painterResource(id = iconRes),
         tint = MaterialTheme.colorScheme.onPrimaryContainer,
         contentDescription = null
     )
 }
+
