@@ -6,73 +6,104 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
-//noinspection UsingMaterialAndMaterial3Libraries
-import androidx.compose.material.Scaffold
-//noinspection UsingMaterialAndMaterial3Libraries
-import androidx.compose.material.Text
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.android.modularmvi.ui.navigation.AppNavigator
 import com.android.modularmvi.ui.navigation.Destinations
 import com.android.modularmvi.ui.navigation.Routes
+import com.android.modularmvi.ui.screens.example.DetailScreen
+import com.android.modularmvi.ui.screens.example.KEY_ITEM_ID
+import com.android.modularmvi.ui.screens.example.ProfileScreen
+import com.android.modularmvi.ui.screens.example.SettingScreen
+import com.android.modularmvi.ui.screens.home.HomeScreen
 import com.android.modularmvi.ui.screens.main.component.BottomNavigationBar
 import com.android.modularmvi.ui.theme.ApplicationTheme
 import com.android.modularmvi.util.Constants
 
-
 @Composable
-fun MainScreen(
-    navController: NavHostController = rememberNavController()
-) {
-    val navRoutes = listOf(
-        Destinations.Home,
-        Destinations.Profile,
-        Destinations.Settings,
-    )
+fun MainScreen() {
+    val navController: NavHostController = rememberNavController()
+    val appNavigator = AppNavigator(navController)
+    val navRoutes = getNavigationRoutes()
 
     Scaffold(
         bottomBar = {
-            BottomNavigationBar(
-                navController = navController,
-                navItems = navRoutes
-            )
+            val backStackEntry by navController.currentBackStackEntryAsState()
+            val currentRoute = backStackEntry?.destination?.route
+
+            // Show bottom navigation bar only if the current route is in the main navigation list
+            if (!currentRoute.isNullOrEmpty() && currentRoute in navRoutes.map { it.route }) {
+                BottomNavigationBar(
+                    appNavigator = appNavigator,
+                    navItems = navRoutes,
+                    currentRoute = currentRoute,
+                )
+            }
         },
         modifier = Modifier
             .fillMaxSize()
             .navigationBarsPadding()
             .statusBarsPadding()
     ) { innerPadding ->
-        NavHost(
+        NavigationGraph(
             navController = navController,
-            startDestination = Destinations.Home.route,
+            appNavigator = appNavigator,
             modifier = Modifier.padding(innerPadding)
-        ) {
-            composable(Destinations.Home.route) { HomeScreen() }
-            composable(Destinations.Profile.route) { ProfileScreen() }
-            composable(Destinations.Settings.route) { SettingScreen() }
-        }
+        )
     }
 }
 
-//Sample Screens
+/**
+ * Returns a list of main navigation destinations.
+ */
 @Composable
-fun HomeScreen() {
-    Text(Routes.HOME, textAlign = TextAlign.Center, modifier = Modifier.fillMaxSize())
-}
+fun getNavigationRoutes() = listOf(
+    Destinations.Home,
+    Destinations.Profile,
+    Destinations.Settings,
+)
 
+/**
+ * Navigation Graph: Defines the app's navigation routes.
+ */
 @Composable
-fun ProfileScreen() {
-    Text(Routes.PROFILE, textAlign = TextAlign.Center, modifier = Modifier.fillMaxSize())
-}
+fun NavigationGraph(
+    navController: NavHostController,
+    appNavigator: AppNavigator,
+    modifier: Modifier = Modifier
+) {
+    NavHost(
+        navController = navController,
+        startDestination = Destinations.Home.route,
+        modifier = modifier
+    ) {
+        // Home Screen with navigation callback
+        composable(Destinations.Home.route) {
+            HomeScreen(
+                onNavigateToDetail = { route ->
+                    appNavigator.navigateTo(route)
+                }
+            )
+        }
 
-@Composable
-fun SettingScreen() {
-    Text(Routes.SETTINGS, textAlign = TextAlign.Center, modifier = Modifier.fillMaxSize())
+        // Profile and Settings Screens
+        composable(Destinations.Profile.route) { ProfileScreen() }
+        composable(Destinations.Settings.route) { SettingScreen() }
+
+        // Detail Screen with dynamic item ID
+        composable("${Routes.DETAIL}/{${KEY_ITEM_ID}}") { backStackEntry ->
+            val id = backStackEntry.arguments?.getString(KEY_ITEM_ID) ?: ""
+            DetailScreen(itemId = id, navController)
+        }
+    }
 }
 
 @Preview(
@@ -91,3 +122,4 @@ fun AppPreview() {
         MainScreen()
     }
 }
+
