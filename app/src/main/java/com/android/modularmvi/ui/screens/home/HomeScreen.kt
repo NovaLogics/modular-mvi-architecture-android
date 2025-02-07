@@ -25,12 +25,14 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.android.modularmvi.domain.model.HomeItem
 import com.android.modularmvi.ui.common.component.ErrorMessageCard
 import com.android.modularmvi.ui.navigation.Destinations
-import com.android.modularmvi.ui.navigation.Routes
+import com.android.modularmvi.ui.navigation.Navigation
 import com.android.modularmvi.ui.screens.home.component.ListItem
 import com.android.modularmvi.ui.theme.ApplicationTheme
-import com.android.modularmvi.util.Constants
+import com.android.modularmvi.util.MODE_LIGHT
+import com.android.modularmvi.util.MODE_NIGHT
 
 @Composable
 fun HomeScreen(
@@ -84,7 +86,7 @@ fun ScreenUiContent(
         topBar = {
             TopAppBar(title = {
                 Text(
-                    text = Routes.HOME.uppercase(),
+                    text = Navigation.Routes.HOME.uppercase(),
                     color = MaterialTheme.colorScheme.onPrimaryContainer,
                     fontSize = 18.sp,
                     fontWeight = FontWeight.Bold,
@@ -119,29 +121,36 @@ fun ScreenUiContent(
  * Displays a list of items with click support.
  */
 @Composable
-fun ItemList(items: List<String>, onItemClick: (String) -> Unit) {
+fun ItemList(items: List<HomeItem>, onItemClick: (String) -> Unit) {
     LazyColumn(modifier = Modifier.fillMaxSize()) {
         items(items) { item ->
-            ListItem(item, onItemClick)
+            ListItem(item.title, onItemClick)
         }
     }
 }
 
 @Preview(
-    name = Constants.MODE_LIGHT,
+    name = MODE_LIGHT,
     showBackground = true,
     uiMode = UI_MODE_NIGHT_NO
 )
 @Preview(
-    name = Constants.MODE_NIGHT,
+    name = MODE_NIGHT,
     showBackground = true,
     uiMode = UI_MODE_NIGHT_YES
 )
 @Composable
 fun HomePreview() {
+
+    val homeItems = listOf(
+        HomeItem(id = 1, title = "Item 1", description = "This is item 1"),
+        HomeItem(id = 2, title = "Item 2", description = "This is item 2"),
+        HomeItem(id = 3, title = "Item 3", description = "This is item 3")
+    )
+
     val uiState = HomeUiState(
         isLoading = false,
-        items = listOf("Item 1", "Item 2", "Item 3"),
+        items = homeItems,
         error = ""
     )
 
