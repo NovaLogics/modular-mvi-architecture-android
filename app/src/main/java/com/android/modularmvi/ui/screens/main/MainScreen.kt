@@ -12,21 +12,23 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.android.modularmvi.ui.navigation.AppNavigator
 import com.android.modularmvi.ui.navigation.Destinations
-import com.android.modularmvi.ui.navigation.Routes
+import com.android.modularmvi.ui.navigation.Navigation
 import com.android.modularmvi.ui.screens.example.DetailScreen
-import com.android.modularmvi.ui.screens.example.KEY_ITEM_ID
 import com.android.modularmvi.ui.screens.example.ProfileScreen
 import com.android.modularmvi.ui.screens.example.SettingScreen
 import com.android.modularmvi.ui.screens.home.HomeScreen
 import com.android.modularmvi.ui.screens.main.component.BottomNavigationBar
 import com.android.modularmvi.ui.theme.ApplicationTheme
-import com.android.modularmvi.util.Constants
+import com.android.modularmvi.util.MODE_LIGHT
+import com.android.modularmvi.util.MODE_NIGHT
 
 @Composable
 fun MainScreen() {
@@ -99,20 +101,25 @@ fun NavigationGraph(
         composable(Destinations.Settings.route) { SettingScreen() }
 
         // Detail Screen with dynamic item ID
-        composable("${Routes.DETAIL}/{${KEY_ITEM_ID}}") { backStackEntry ->
-            val id = backStackEntry.arguments?.getString(KEY_ITEM_ID) ?: ""
+        composable(
+            route = Navigation.Routes.ITEM_DETAIL,
+            arguments = listOf(navArgument(name = Navigation.Args.ITEM_ID){
+                type = NavType.StringType
+            })
+        ) { backStackEntry ->
+            val id = backStackEntry.arguments?.getString(Navigation.Args.ITEM_ID) ?: ""
             DetailScreen(itemId = id, navController)
         }
     }
 }
 
 @Preview(
-    name = Constants.MODE_LIGHT,
+    name = MODE_LIGHT,
     showBackground = true,
     uiMode = UI_MODE_NIGHT_NO
 )
 @Preview(
-    name = Constants.MODE_NIGHT,
+    name = MODE_NIGHT,
     showBackground = true,
     uiMode = UI_MODE_NIGHT_YES
 )

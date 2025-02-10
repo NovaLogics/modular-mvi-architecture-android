@@ -5,7 +5,6 @@ import androidx.navigation.NavController
 class AppNavigator(
     private val navController: NavController
 ) {
-
     /**
      * Navigates to the specified destination.
      */

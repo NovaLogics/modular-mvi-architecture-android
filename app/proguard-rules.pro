@@ -19,3 +19,8 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+
+# Hilt rules
+-keep class dagger.hilt.** { *; }
+-keep class com.android.modularmvi.** { *; }
+-keep class * extends dagger.hilt.internal.aggregatedroot.codegen.** { *; }

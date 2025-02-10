@@ -24,7 +24,8 @@ val Typography = Typography(
     displayMedium = TextStyle(
         fontFamily = Montserrat,
         fontWeight = FontWeight.Normal,
-        fontSize = 20.sp
+        fontSize = 20.sp,
+        lineHeight = 28.sp,
     ),
 
     /* Other default text styles to override

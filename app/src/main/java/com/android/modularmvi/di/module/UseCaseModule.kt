@@ -7,6 +7,8 @@ import com.android.modularmvi.data.repository.LocalDataRepositoryImpl
 import com.android.modularmvi.data.repository.QuoteRepositoryImpl
 import com.android.modularmvi.domain.repository.LocalDataRepository
 import com.android.modularmvi.domain.repository.QuoteRepository
+import com.android.modularmvi.domain.usecase.FetchQuotesFromApiUseCase
+import com.android.modularmvi.domain.usecase.GetQuotesFromDbUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -15,27 +17,27 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-object RepositoryModule {
+object UseCaseModule {
 
     @Provides
     @Singleton
-    fun provideQuoteRepository(
-        apiService: QuoteApiService,
-        quoteDao: QuoteDao
-    ): QuoteRepository {
-        return QuoteRepositoryImpl(
-            apiService = apiService,
-            quoteDao= quoteDao,
+    fun provideFetchQuotesFromApiUseCase(
+        repository: QuoteRepository
+    ): FetchQuotesFromApiUseCase {
+        return FetchQuotesFromApiUseCase(
+            quoteRepository = repository
         )
     }
 
     @Provides
     @Singleton
-    fun provideLocalDataRepository(
-        localDataSource : LocalDataSource,
-    ): LocalDataRepository {
-        return LocalDataRepositoryImpl(
-            localDataSource = localDataSource,
+    fun provideGetQuotesFromDbUseCase(
+        localDataRepository : LocalDataRepository,
+        quoteRepository: QuoteRepository
+    ): GetQuotesFromDbUseCase {
+        return GetQuotesFromDbUseCase(
+            localDataRepository = localDataRepository,
+            quoteRepository = quoteRepository
         )
     }
 }

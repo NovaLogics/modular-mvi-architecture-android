@@ -4,8 +4,8 @@ import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -24,9 +24,8 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.android.modularmvi.ui.theme.ApplicationTheme
-import com.android.modularmvi.util.Constants
+import com.android.modularmvi.util.MODE_NIGHT
 
-const val KEY_ITEM_ID = "itemId"
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -70,7 +69,7 @@ fun DetailScreen(
                 textAlign = TextAlign.Center,
                 fontWeight = FontWeight.Bold,
                 style = MaterialTheme.typography.displayMedium.copy(
-                    lineHeight = 20.sp,
+                    lineHeight = 40.sp,
                 ),
             )
         }
@@ -78,7 +77,7 @@ fun DetailScreen(
 }
 
 @Preview(
-    name = Constants.MODE_NIGHT,
+    name = MODE_NIGHT,
     showBackground = true,
     uiMode = UI_MODE_NIGHT_YES
 )
