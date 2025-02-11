@@ -22,7 +22,9 @@ Modular MVI Architecture  <br>
 ## Introduction
 
 **Understanding MVI Architecture**  
+
 This documentation provides an overview of a modular MVI architecture designed for Android applications. The architecture is organized into distinct modules that separate concerns, improve maintainability, and promote scalability. Each module has its own responsibilities, from handling UI state to managing data sources and dependency injection.
+
 ---
 
 ### **What Makes MVI Special?**
@@ -97,6 +99,8 @@ Here’s how the pieces fit together:
 
 By organizing code this way, your app stays clean even as it grows like building with Lego blocks! 🧱
 
+---
+
 ### **Current App Screens**
 
 <div align="center">
@@ -128,7 +132,7 @@ This separation allows each layer to evolve independently and facilitates testin
 
 ### App Module
 
-**Location:** ` app`
+**Location:** `app`
 
 **Files:**
 - **MainActivity.kt:** The main activity that serves as the primary entry point for the app’s UI.
@@ -423,6 +427,6 @@ The Util module provides general-purpose utilities that can be used by other mod
 
 ## Conclusion
 
-This modular MVI architecture separates concerns across different layers of the application—from UI rendering and state management to data handling and business logic. Each module has a clear responsibility, promoting clean code, testability, and ease of maintenance. By adhering to this structure, developers can work on individual components without affecting others, facilitating scalability and long-term project sustainability.
+This modular MVI architecture separates concerns across different layers of the application, from UI rendering and state management to data handling and business logic. Each module has a clear responsibility, promoting clean code, testability, and ease of maintenance. By adhering to this structure, developers can work on individual components without affecting others, facilitating scalability and long-term project sustainability.
 
 ---
