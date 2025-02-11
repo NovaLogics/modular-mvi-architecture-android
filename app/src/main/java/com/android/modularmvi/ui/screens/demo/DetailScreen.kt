@@ -104,7 +104,7 @@ fun QuoteItem(title: String, data: String) {
             text = title,
             fontSize = 16.sp,
             textAlign = TextAlign.Center,
-            fontWeight = FontWeight.Light,
+            fontWeight = FontWeight.Normal,
             color = MaterialTheme.colorScheme.primary
         )
         Text(
