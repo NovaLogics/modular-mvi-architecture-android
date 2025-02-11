@@ -8,7 +8,8 @@ interface QuoteRepository {
     suspend fun fetchQuotesFromApi(limit: Int): Response<List<Quote>>
     suspend fun insertQuotes(quotes: List<Quote>?)
     suspend fun clearQuotes()
+    suspend fun getQuoteById(id: String): Quote?
+    suspend fun getQuoteCount(): Int
     fun getAllQuotes(): Flow<List<Quote>>
     fun getLastNQuotes(limit: Int): Flow<List<Quote>>
-    suspend fun getQuoteCount(): Int
 }
