@@ -1,6 +1,9 @@
-# Modular MVI Architecture
+<h1 align="center" >
+Modular MVI Architecture  <br> 
+♨ [ ᴀɴᴅʀᴏɪᴅ  ᴘʀᴏᴊᴇᴄᴛ ] ♨
+</h1>
 
-## Table of Contents
+⁃ ᴄᴏɴᴛᴇɴᴛꜱ ⁃
 1. [Introduction](#introduction)
 2. [Architecture Overview](#architecture-overview)
 3. [Module Details](#module-details)
@@ -11,14 +14,97 @@
     - [Domain Module](#domain-module)
     - [UI Module](#ui-module)
     - [Util Module](#util-module)
-4. [MVI Pattern Implementation](#mvi-pattern-implementation)
+4. [Android Architecture Project Structure](#android-architecture-project-structure)
 5. [Conclusion](#conclusion)
 
 ---
 
 ## Introduction
 
+**Understanding MVI Architecture**  
 This documentation provides an overview of a modular MVI architecture designed for Android applications. The architecture is organized into distinct modules that separate concerns, improve maintainability, and promote scalability. Each module has its own responsibilities, from handling UI state to managing data sources and dependency injection.
+---
+
+### **What Makes MVI Special?**
+- **It’s like MVVM’s upgraded sibling**: While MVVM is popular, MVI adds stricter rules for managing UI states and user actions.
+- **Unidirectional flow**: Data moves in one direction (User → Intent → Model → View), reducing bugs and surprises.
+
+---
+
+### **Key Components of MVI**
+Here’s how the pieces fit together:
+
+1. **Model (The Truth Source)**
+    - Represents the **current state of the UI** (e.g., “Loading,” “Error,” “Data Loaded”).
+    - Defined in files like `UiState.kt/ViewState.kt` (general rules) and `HomeUiState.kt` (screen-specific states).
+    - *Example*: A weather app’s state could be `WeatherState.Loading` or `WeatherState.Sunny(27°C)`.
+
+2. **View (The Display)**
+    - Screens like `HomeScreen.kt` that **show the UI** based on the current state.
+    - *How it works*: Observes the Model and updates automatically, like a TV changing channels.
+
+3. **Intent (User Actions)**
+    - **What the user does** (e.g., clicking a button, typing).
+    - Defined in files like `HomeIntent.kt`.
+    - *Example*: A “Refresh” button click becomes `HomeIntent.RefreshWeather`.
+
+4. **Side Effects (One-Time Events)**
+    - Short-lived actions like showing an error message or navigating to a new screen.
+    - Handled by `ViewSideEffect.kt` and screen-specific files like `HomeEffect.kt`.
+    - *Why?* So you don’t show the same error twice after rotating the screen.
+
+5. **ViewModel (The Brain)**
+    - Processes intents, updates the state, and triggers side effects.
+    - Uses `BaseViewModel.kt` for shared logic, while screens like `HomeViewModel.kt` add specifics.
+
+---
+
+### **How It Works in Code**
+- **StateFlow**:
+    - Tracks the UI state (e.g., `uiState`). Always has a value, like a live scoreboard.
+    - *Used for*: Persistent states (e.g., a loaded list of items).
+
+- **SharedFlow**:
+    - Handles user events (intents). Drops events if nobody’s listening.
+    - *Used for*: Actions like button clicks.
+
+- **Channels**:
+    - Manages one-time side effects (e.g., error messages).
+    - *Used for*: “Fire and forget” events that shouldn’t repeat.
+
+---
+
+### **Project Structure Example**
+```
+├── core           # Shared core components
+│   └── BaseViewModel.kt  
+│
+└── home           # A feature module (e.g., Home Screen)
+    ├── HomeEffect.kt      # Side effects (e.g., navigation)
+    ├── HomeIntent.kt      # User actions (e.g., button clicks)
+    ├── HomeScreen.kt      # UI layout
+    ├── HomeUiState.kt     # State (e.g., loading, data loaded)
+    └── HomeViewModel.kt   # Logic for this screen
+```
+
+---
+
+### **Why This Matters**
+- **Predictable**: Data flows in one direction, like a waterfall.
+- **Easy to debug**: Every action and state change is traceable.
+- **Scalable**: Adding new features feels the same as building previous ones.
+
+
+By organizing code this way, your app stays clean even as it grows like building with Lego blocks! 🧱
+
+### **Current App Screens**
+
+<div align="center">
+<img src="./_archive/screenshots/screen-main.png" width="280" height="640" />
+
+<img src="./_archive/screenshots/screen-info.png" width="280" height="640" />
+
+</div>
 
 ---
 
@@ -234,26 +320,104 @@ The Util module provides general-purpose utilities that can be used by other mod
 
 ---
 
-## MVI Pattern Implementation
+## Android Architecture Project Structure
 
-This architecture is built on the Model-View-Intent (MVI) pattern. Key aspects include:
+```
+📁 app
+├── 📄 MainActivity.kt
+└── 📄 MainApplication.kt
 
-- **Model (State):**  
-  Represented by `ViewState.kt` in the core module and specialized states (e.g., `HomeUiState.kt`) in the UI module. This encapsulates the data to be displayed.
+📁 core
+├── 📄 BaseViewModel.kt
+├── 📄 Response.kt
+├── 📄 UiState.kt
+└── 📁 state
+├── 📄 ViewIntent.kt
+├── 📄 ViewSideEffect.kt
+└── 📄 ViewState.kt
 
-- **View (UI):**  
-  Handled by various screens (e.g., `HomeScreen.kt`, `MainScreen.kt`) that observe state changes and render UI accordingly.
+📁 data
+├── 📁 local
+│   ├── 📁 database
+│   │   ├── 📄 AppDatabase.kt
+│   │   ├── 📁 dao
+│   │   │   └── 📄 QuoteDao.kt
+│   │   ├── 📁 entity
+│   │   │   └── 📄 QuoteEntity.kt
+│   │   └── 📁 util
+│   │       └── 📄 Converters.kt
+│   ├── 📁 datasource
+│   │   └── 📄 LocalDataSource.kt
+│   └── 📁 datastore
+│       ├── 📄 DataStoreKeys.kt
+│       ├── 📄 DataStoreRepository.kt
+│       └── 📄 DataStoreRepositoryImpl.kt
+├── 📁 remote
+│   ├── 📄 ApiConstants.kt
+│   └── 📄 QuoteApiService.kt
+└── 📁 repository
+├── 📄 LocalDataRepositoryImpl.kt
+└── 📄 QuoteRepositoryImpl.kt
 
-- **Intent (Actions):**  
-  Defined in files such as `ViewIntent.kt` and screen-specific intent files (e.g., `HomeIntent.kt`). User actions are converted into intents that the ViewModel processes.
+📁 di
+├── 📁 components
+│   └── 📄 TrustManager.kt
+└── 📁 module
+├── 📄 AppModule.kt
+├── 📄 DatabaseModule.kt
+├── 📄 DataSourceModule.kt
+├── 📄 DataStoreModule.kt
+├── 📄 DispatchersModule.kt
+├── 📄 NetworkModule.kt
+├── 📄 RepositoryModule.kt
+└── 📄 UseCaseModule.kt
 
-- **Side Effects:**  
-  Managed via `ViewSideEffect.kt` and screen-specific implementations (e.g., `HomeEffect.kt`), ensuring that one-time events (like navigation or error messages) are handled appropriately.
+📁 domain
+├── 📁 model
+│   └── 📄 Quote.kt
+├── 📁 repository
+│   ├── 📄 LocalDataRepository.kt
+│   └── 📄 QuoteRepository.kt
+└── 📁 usecase
+├── 📄 FetchQuotesFromApiUseCase.kt
+└── 📄 GetQuotesFromDbUseCase.kt
 
-- **ViewModel:**  
-  The `BaseViewModel.kt` in the core module provides common functionality that screen-specific ViewModels extend. This layer is responsible for processing intents, updating the view state, and triggering side effects.
+📁 ui
+├── 📁 common
+│   └── 📁 component
+│       ├── 📄 CustomProgressIndicator.kt
+│       └── 📄 ErrorMessageCard.kt
+├── 📁 navigation
+│   ├── 📄 AppNavigator.kt
+│   ├── 📄 Destinations.kt
+│   └── 📄 Navigation.kt
+├── 📁 screens
+│   ├── 📁 demo
+│   │   └── 📄 screens.kt ...
+│   ├── 📁 home
+│   │   ├── 📁 component
+│   │   │   └── 📄 ListItem.kt
+│   │   ├── 📄 HomeEffect.kt
+│   │   ├── 📄 HomeIntent.kt
+│   │   ├── 📄 HomeScreen.kt
+│   │   ├── 📄 HomeUiState.kt
+│   │   └── 📄 HomeViewModel.kt
+│   └── 📁 main
+│       ├── 📁 component
+│       │   └── 📄 BottomNavigationBar.kt
+│       └── 📄 MainScreen.kt
+└── 📁 theme
+├── 📄 Color.kt
+├── 📄 Shapes.kt
+├── 📄 Theme.kt
+└── 📄 Type.kt
 
-This structure ensures a unidirectional data flow, making the application predictable, easier to debug, and maintain.
+📁 util
+├── 📄 Common.kt
+├── 📄 Constants.kt
+├── 📄 Extensions.kt
+└── 📄 NetworkUtil.kt
+```
 
 ---
 
