@@ -1,4 +1,4 @@
-package com.android.modularmvi.ui.screens.example
+package com.android.modularmvi.ui.screens.demo
 
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.foundation.layout.Box

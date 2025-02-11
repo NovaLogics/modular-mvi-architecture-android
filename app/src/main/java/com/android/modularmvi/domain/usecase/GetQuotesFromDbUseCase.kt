@@ -12,11 +12,10 @@ class GetQuotesFromDbUseCase @Inject constructor(
     private val quoteRepository: QuoteRepository,
 ) {
     suspend fun execute(quoteLimit: Int): Flow<List<Quote>> {
-
-        val isDatabaseLow =  quoteRepository.getQuoteCount() < QUOTE_LIMIT
-        return if(isDatabaseLow){
+        val isDatabaseLow = quoteRepository.getQuoteCount() < QUOTE_LIMIT
+        return if (isDatabaseLow) {
             localDataRepository.getOfflineQuotes()
-        } else{
+        } else {
             quoteRepository.getLastNQuotes(limit = quoteLimit)
         }
     }

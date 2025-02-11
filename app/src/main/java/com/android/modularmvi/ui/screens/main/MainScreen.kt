@@ -21,9 +21,9 @@ import androidx.navigation.navArgument
 import com.android.modularmvi.ui.navigation.AppNavigator
 import com.android.modularmvi.ui.navigation.Destinations
 import com.android.modularmvi.ui.navigation.Navigation
-import com.android.modularmvi.ui.screens.example.DetailScreen
-import com.android.modularmvi.ui.screens.example.ProfileScreen
-import com.android.modularmvi.ui.screens.example.SettingScreen
+import com.android.modularmvi.ui.screens.demo.DetailScreen
+import com.android.modularmvi.ui.screens.demo.ProfileScreen
+import com.android.modularmvi.ui.screens.demo.SettingScreen
 import com.android.modularmvi.ui.screens.home.HomeScreen
 import com.android.modularmvi.ui.screens.main.component.BottomNavigationBar
 import com.android.modularmvi.ui.theme.ApplicationTheme

@@ -5,6 +5,7 @@ import com.android.modularmvi.ui.navigation.Navigation.Args.ITEM_ID
 object Navigation {
     object Args {
         const val ITEM_ID = "itemId"
+        const val ITEM_JSON = "itemJson"
     }
 
     object Routes {

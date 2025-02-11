@@ -3,8 +3,8 @@ package com.android.modularmvi.di.module
 import android.content.Context
 import com.android.modularmvi.BuildConfig
 import com.android.modularmvi.data.remote.QuoteApiService
-import com.android.modularmvi.di.components.getUnsafeSSLSocketFactory
-import com.android.modularmvi.di.components.getUnsafeTrustManager
+import com.android.modularmvi.di.component.getUnsafeSSLSocketFactory
+import com.android.modularmvi.di.component.getUnsafeTrustManager
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
