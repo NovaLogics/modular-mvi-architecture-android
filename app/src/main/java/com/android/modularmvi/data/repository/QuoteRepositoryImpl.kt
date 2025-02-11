@@ -36,6 +36,10 @@ class QuoteRepositoryImpl @Inject constructor(
         quoteDao.clearQuotes()
     }
 
+    override suspend fun getQuoteById(id: String): Quote? {
+        return quoteDao.getQuoteById(quoteId = id)?.toDomainModel()
+    }
+
     override fun getAllQuotes(): Flow<List<Quote>> {
         return quoteDao.getAllQuotes().map { list -> list.map { it.toDomainModel() } }
     }

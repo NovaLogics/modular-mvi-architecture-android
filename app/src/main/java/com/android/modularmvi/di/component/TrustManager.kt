@@ -1,4 +1,4 @@
-package com.android.modularmvi.di.components
+package com.android.modularmvi.di.component
 
 import android.annotation.SuppressLint
 import java.security.SecureRandom

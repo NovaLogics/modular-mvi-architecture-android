@@ -1,10 +1,5 @@
 package com.android.modularmvi.di.module
 
-import com.android.modularmvi.data.local.database.dao.QuoteDao
-import com.android.modularmvi.data.local.datasource.LocalDataSource
-import com.android.modularmvi.data.remote.QuoteApiService
-import com.android.modularmvi.data.repository.LocalDataRepositoryImpl
-import com.android.modularmvi.data.repository.QuoteRepositoryImpl
 import com.android.modularmvi.domain.repository.LocalDataRepository
 import com.android.modularmvi.domain.repository.QuoteRepository
 import com.android.modularmvi.domain.usecase.FetchQuotesFromApiUseCase
